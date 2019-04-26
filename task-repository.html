@@ -13,6 +13,10 @@
           limit: {
             type: Number,
             value: 5
+          },
+          newTask: {
+            type: Object,
+            observer: '_addNewTask'
           }
         };
       }
@@ -146,6 +150,21 @@
             done: false
           }
         ]
+      }
+
+      _addNewTask(newValue) {
+        const newTaskEvent = new CustomEvent(
+          'task-created',
+          {
+            bubbles: true,
+            composed: true
+          }
+        )
+
+        this.taskListRepo.unshift(newValue);
+        console.log('New task list: ', this.taskListRepo);
+
+        setTimeout(() => { this.dispatchEvent(newTaskEvent); }, 300);
       }
 
       _getPage(offset, limit) {
