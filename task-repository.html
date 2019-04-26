@@ -17,6 +17,10 @@
         };
       }
 
+      static get observers() {
+        return ['_getPage(offset,limit)']
+      }
+
       constructor() {
         super();
 
@@ -144,11 +148,11 @@
         ]
       }
 
-      getPage() {
+      _getPage(offset, limit) {
         const leng = this.taskListRepo.length;
 
-        let start = this.offset;
-        let end = this.offset + this.limit;
+        let start = offset;
+        let end = offset + limit;
         let pageEvent;
 
         if (start < 0) {
@@ -166,8 +170,8 @@
             composed: true,
             detail: {
               total: leng,
-              offset: this.offset,
-              limit: this.limit,
+              offset: offset,
+              limit: limit,
               page: this.taskListRepo.slice(start, end)
             }
           }
