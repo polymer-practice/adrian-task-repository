@@ -17,6 +17,10 @@
           newTask: {
             type: Object,
             observer: '_addNewTask'
+          },
+          upDateTask: {
+            type: Object,
+            observer: '_updateTask'
           }
         };
       }
@@ -150,6 +154,35 @@
             done: false
           }
         ]
+      }
+
+      _updateTask(newValue) {
+        const updateEvent = new CustomEvent(
+          'task-updated',
+          {
+            bubbles: true,
+            composed: true
+          }
+        )
+
+        let found = false;
+        let leng = this.taskListRepo.length;
+        let index = 0;
+
+        while ((!found) && (index < leng)) {
+          found = this.taskListRepo[index].key === newValue.key;
+
+          if (!found) {
+            index++;
+          }
+        }
+
+        if (index < leng) {
+          Object.assign(this.taskListRepo[index], {...newValue});
+        }
+
+        console.log('Task updated: ', this.taskListRepo);
+        setTimeout(() => { this.dispatchEvent(updateEvent); }, 300);
       }
 
       _addNewTask(newValue) {
